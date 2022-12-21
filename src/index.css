@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 /* https://www.joshwcomeau.com/css/custom-css-reset/ */
 
 /*

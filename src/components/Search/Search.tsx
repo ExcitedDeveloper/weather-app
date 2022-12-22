@@ -30,8 +30,6 @@ const Search = ({ onSearchChange }: SearchProps) => {
       ? tmpCountryCode || DFLT_COUNTRY_CODE
       : undefined
 
-    // https://wft-geo-db.p.rapidapi.com/v1/geo/countries/US/regions/CA/cities
-
     let url
     let results
 

@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import { SingleValue, ActionMeta } from 'react-select'
-import { AsyncPaginate } from 'react-select-async-paginate'
+import { SingleValue } from 'react-select'
+import { AsyncPaginate, LoadOptions } from 'react-select-async-paginate'
 import { GEO_API_URL, geoApiOptions } from './api'
 
 export interface SearchProps {
@@ -10,18 +10,51 @@ export interface SearchProps {
 const Search = ({ onSearchChange }: SearchProps) => {
   const [search, setSearch] = useState<string | null>(null)
 
-  const loadOptions = (inputValue: string) => {
-    fetch(
-      `${GEO_API_URL}/cities?limit=20&namePrefix=${inputValue}`,
+  const loadOptions: LoadOptions<unknown, any, unknown> = (
+    inputValue: string
+  ): any => {
+    const emptyOptions = { options: [] }
+
+    if (!inputValue) return emptyOptions
+
+    const [namePrefix, regionCode, countryCode] = inputValue
+      .split(',')
+      .map((part) => part.toLowerCase())
+      .map((part) => part.trim())
+
+    const results = fetch(
+      `${GEO_API_URL}/cities?limit=10&namePrefix=${namePrefix}`,
       geoApiOptions
     )
       .then((response) => response.json())
-      .then((response) => console.log(response))
+      .then((response) => {
+        return {
+          options: response.data
+            .filter((city: any) => {
+              return regionCode
+                ? city.regionCode.toLowerCase() === regionCode
+                : true
+            })
+            .filter((city: any) => {
+              return countryCode
+                ? city.countryCode.toLowerCase() === countryCode
+                : true
+            })
+            .map((city: any) => {
+              return {
+                value: `${city.latitude} ${city.longitude}`,
+                label: `${city.name}, ${city.regionCode}, ${city.country}`,
+              }
+            }),
+        }
+      })
       // eslint-disable-next-line no-console
       .catch((err) => console.error(err))
+
+    return results || emptyOptions
   }
 
-  const handleOnChange = (searchData: SingleValue<string>): void => {
+  const handleOnChange = (searchData: any): void => {
     setSearch(searchData)
     onSearchChange(searchData)
   }

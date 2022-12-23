@@ -15,6 +15,12 @@ export interface City {
   longitude: string
   regionCode: string
   countryCode: string
+  country?: string
+}
+
+const getCountryName = (countryCode: string) => {
+  const regionNames = new Intl.DisplayNames(['en'], { type: 'region' })
+  return regionNames.of(countryCode)
 }
 
 const Search = ({ onSearchChange }: SearchProps) => {
@@ -52,7 +58,9 @@ const Search = ({ onSearchChange }: SearchProps) => {
         options: json.data.map((city: City) => {
           return {
             value: `${city.latitude} ${city.longitude}`,
-            label: `${city.name}, ${regionCode}, ${countryCode}`,
+            label: `${city.name}, ${regionCode.toUpperCase()}, ${getCountryName(
+              countryCode
+            )}`,
           }
         }),
       }
@@ -78,7 +86,11 @@ const Search = ({ onSearchChange }: SearchProps) => {
           .map((city: City) => {
             return {
               value: `${city.latitude} ${city.longitude}`,
-              label: `${city.name}, ${city.regionCode}, ${city.countryCode}`,
+              label: `${
+                city.name
+              }, ${city.regionCode.toUpperCase()}, ${getCountryName(
+                city.countryCode
+              )}`,
             }
           }),
       }

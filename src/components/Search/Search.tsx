@@ -45,10 +45,11 @@ const Search = ({ onSearchChange }: SearchProps) => {
       url = `${GEO_API_URL}/countries/${countryCode}/regions/${regionCode}/cities?namePrefix=${namePrefix}`
 
       const response = await fetch(url, geoApiOptions)
-      const data = await response.json()
+
+      const json = await response.json()
 
       results = {
-        options: data.map((city: City) => {
+        options: json.data.map((city: City) => {
           return {
             value: `${city.latitude} ${city.longitude}`,
             label: `${city.name}, ${regionCode}, ${countryCode}`,
@@ -58,12 +59,12 @@ const Search = ({ onSearchChange }: SearchProps) => {
     } else {
       url = `${GEO_API_URL}/cities?limit=10&namePrefix=${namePrefix}`
 
-      console.log(`************ geoApiOptions`, geoApiOptions)
       const response = await fetch(url, geoApiOptions)
-      const data = await response.json()
+
+      const json = await response.json()
 
       results = {
-        options: data
+        options: json.data
           .filter((city: City) => {
             return regionCode
               ? city.regionCode.toLowerCase() === regionCode

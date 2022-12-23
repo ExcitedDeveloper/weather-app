@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { SingleValue } from 'react-select'
-import { AsyncPaginate, LoadOptions } from 'react-select-async-paginate'
+import { AsyncPaginate } from 'react-select-async-paginate'
 import { GEO_API_URL, geoApiOptions } from './api'
 
 export interface SearchProps {
@@ -9,15 +9,23 @@ export interface SearchProps {
 
 export const DFLT_COUNTRY_CODE = 'US'
 
+export interface City {
+  name: string
+  latitude: string
+  longitude: string
+  regionCode: string
+  countryCode: string
+}
+
 const Search = ({ onSearchChange }: SearchProps) => {
   const [search, setSearch] = useState<string | null>(null)
 
-  const loadOptions: LoadOptions<unknown, any, unknown> = (
-    inputValue: string
-  ): any => {
+  const loadOptions = async (inputValue: string) => {
     const emptyOptions = { options: [] }
 
-    if (!inputValue) return emptyOptions
+    if (!inputValue) {
+      return emptyOptions
+    }
 
     const [namePrefix, regionCode, tmpCountryCode] = inputValue
       .split(',')
@@ -36,54 +44,49 @@ const Search = ({ onSearchChange }: SearchProps) => {
     if (namePrefix && regionCode && countryCode) {
       url = `${GEO_API_URL}/countries/${countryCode}/regions/${regionCode}/cities?namePrefix=${namePrefix}`
 
-      results = fetch(url, geoApiOptions)
-        .then((response) => response.json())
-        .then((response) => {
+      const response = await fetch(url, geoApiOptions)
+      const data = await response.json()
+
+      results = {
+        options: data.map((city: City) => {
           return {
-            options: response.data.map((city: any) => {
-              return {
-                value: `${city.latitude} ${city.longitude}`,
-                label: `${city.name}, ${regionCode}, ${countryCode}`,
-              }
-            }),
+            value: `${city.latitude} ${city.longitude}`,
+            label: `${city.name}, ${regionCode}, ${countryCode}`,
           }
-        })
-        // eslint-disable-next-line no-console
-        .catch((err) => console.error(err))
+        }),
+      }
     } else {
       url = `${GEO_API_URL}/cities?limit=10&namePrefix=${namePrefix}`
 
-      results = fetch(url, geoApiOptions)
-        .then((response) => response.json())
-        .then((response) => {
-          return {
-            options: response.data
-              .filter((city: any) => {
-                return regionCode
-                  ? city.regionCode.toLowerCase() === regionCode
-                  : true
-              })
-              .filter((city: any) => {
-                return countryCode
-                  ? city.countryCode.toLowerCase() === countryCode
-                  : true
-              })
-              .map((city: any) => {
-                return {
-                  value: `${city.latitude} ${city.longitude}`,
-                  label: `${city.name}, ${city.regionCode}, ${city.countryCode}`,
-                }
-              }),
-          }
-        })
-        // eslint-disable-next-line no-console
-        .catch((err) => console.error(err))
+      console.log(`************ geoApiOptions`, geoApiOptions)
+      const response = await fetch(url, geoApiOptions)
+      const data = await response.json()
+
+      results = {
+        options: data
+          .filter((city: City) => {
+            return regionCode
+              ? city.regionCode.toLowerCase() === regionCode
+              : true
+          })
+          .filter((city: City) => {
+            return countryCode
+              ? city.countryCode.toLowerCase() === countryCode
+              : true
+          })
+          .map((city: City) => {
+            return {
+              value: `${city.latitude} ${city.longitude}`,
+              label: `${city.name}, ${city.regionCode}, ${city.countryCode}`,
+            }
+          }),
+      }
     }
 
     return results || emptyOptions
   }
 
-  const handleOnChange = (searchData: any): void => {
+  const handleOnChange = (searchData: SingleValue<string>): void => {
     setSearch(searchData)
     onSearchChange(searchData)
   }

@@ -1,7 +1,8 @@
+import { useContext, useEffect } from 'react'
 import './App.css'
-import UilReact from '@iconscout/react-unicons/icons/uil-react'
 import Search from './components/Search/Search'
 import CardList from './components/CardList/CardList'
+import { LocationContext } from './contexts/LocationContext'
 
 const testData = [
   {
@@ -28,14 +29,18 @@ const testData = [
 ]
 
 function App() {
-  const handleOnSearchChange = (searchData: unknown) => {
-    console.log(`************ searchData`, searchData)
-  }
+  const { currLocation } = useContext(LocationContext)
+
+  useEffect(() => {
+    console.log(
+      `************** lat = ${currLocation?.latitude}, lon = ${currLocation?.longitude}`
+    )
+  }, [currLocation])
 
   return (
     <div className="flex flex-col">
       <div className="mx-auto mt-5 py-5 w-1/4">
-        <Search onSearchChange={handleOnSearchChange} />
+        <Search />
       </div>
       <CardList items={testData} />
     </div>

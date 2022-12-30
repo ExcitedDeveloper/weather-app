@@ -1,11 +1,8 @@
-import { useState } from 'react'
+import { useState, useContext } from 'react'
 import { SingleValue } from 'react-select'
 import { AsyncPaginate } from 'react-select-async-paginate'
 import { GEO_API_URL, geoApiOptions } from './api'
-
-export interface SearchProps {
-  onSearchChange: (newValue: SingleValue<string>) => void
-}
+import { LocationContext } from '../../contexts/LocationContext'
 
 export const DFLT_COUNTRY_CODE = 'US'
 
@@ -18,13 +15,18 @@ export interface City {
   country?: string
 }
 
+export interface LocationValueOf {
+  value: string
+}
+
 const getCountryName = (countryCode: string) => {
   const regionNames = new Intl.DisplayNames(['en'], { type: 'region' })
   return regionNames.of(countryCode)
 }
 
-const Search = ({ onSearchChange }: SearchProps) => {
+const Search = () => {
   const [search, setSearch] = useState<string | null>(null)
+  const { setCurrLocation } = useContext(LocationContext)
 
   const loadOptions = async (inputValue: string) => {
     const emptyOptions = { options: [] }
@@ -101,7 +103,17 @@ const Search = ({ onSearchChange }: SearchProps) => {
 
   const handleOnChange = (searchData: SingleValue<string>): void => {
     setSearch(searchData)
-    onSearchChange(searchData)
+
+    const [latStr, lonStr] = (
+      searchData?.valueOf() as unknown as LocationValueOf
+    ).value.split(' ')
+
+    if (setCurrLocation) {
+      setCurrLocation({
+        latitude: Number(latStr || 0),
+        longitude: Number(lonStr || 0),
+      })
+    }
   }
 
   return (

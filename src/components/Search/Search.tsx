@@ -1,7 +1,7 @@
 import { useState, useContext } from 'react'
 import { SingleValue } from 'react-select'
 import { AsyncPaginate } from 'react-select-async-paginate'
-import { GEO_API_URL, geoApiOptions } from './api'
+import { GEO_API_URL, geoApiOptions } from '../../apis/geoApi'
 import { LocationContext } from '../../contexts/LocationContext'
 
 export const DFLT_COUNTRY_CODE = 'US'
@@ -123,6 +123,7 @@ const Search = () => {
       value={search}
       onChange={handleOnChange}
       loadOptions={loadOptions}
+      className="w-full"
     />
   )
 }

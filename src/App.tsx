@@ -3,6 +3,7 @@ import './App.css'
 import Search from './components/Search/Search'
 import CardList from './components/CardList/CardList'
 import { LocationContext } from './contexts/LocationContext'
+import DailyCard from './components/DailyCard/DailyCard'
 
 const testData = [
   {
@@ -39,8 +40,9 @@ function App() {
 
   return (
     <div className="flex flex-col">
-      <div className="mx-auto mt-5 py-5 w-1/4">
+      <div className="mx-auto mt-5 py-5 w-1/4 flex flex-col items-center">
         <Search />
+        <DailyCard />
       </div>
       <CardList items={testData} />
     </div>

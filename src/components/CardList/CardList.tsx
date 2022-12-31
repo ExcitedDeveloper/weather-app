@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 // import 'tailwindcss/dist/base.css'
 // import 'tailwindcss/dist/components.css'
 

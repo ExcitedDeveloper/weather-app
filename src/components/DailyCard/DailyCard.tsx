@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from 'react'
+import { useEffect, useContext } from 'react'
 import { LocationContext } from '../../contexts/LocationContext'
 import { OPEN_WEATHER_DAILY_API_URL } from '../../apis/openWeatherApi'
 import './DailyCard.css'
@@ -26,7 +26,15 @@ const DailyCard = () => {
     fetchDaily()
   }, [currLocation])
 
-  return <div className="w-60 h-60 daily-card-container">DailyCard</div>
+  return (
+    <div className="flex flex-col w-96 h-60 mt-5 px-3 py-5 rounded-lg bg-slate-700 font-sans font-bold text-base text-white">
+      <div className="flex flex-row">
+        <div>{currLocation?.label}</div>
+        <div>;lakjdf</div>
+      </div>
+      <div>lka;dl</div>
+    </div>
+  )
 }
 
 export default DailyCard

@@ -30,14 +30,6 @@ const testData = [
 ]
 
 function App() {
-  const { currLocation } = useContext(LocationContext)
-
-  useEffect(() => {
-    console.log(
-      `************** lat = ${currLocation?.latitude}, lon = ${currLocation?.longitude}`
-    )
-  }, [currLocation])
-
   return (
     <div className="flex flex-col">
       <div className="mx-auto mt-5 py-5 w-1/4 flex flex-col items-center">

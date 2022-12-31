@@ -16,6 +16,7 @@ export interface City {
 }
 
 export interface LocationValueOf {
+  label: string
   value: string
 }
 
@@ -101,15 +102,16 @@ const Search = () => {
     return results || emptyOptions
   }
 
-  const handleOnChange = (searchData: SingleValue<string>): void => {
-    setSearch(searchData)
+  const handleOnChange = (data: SingleValue<string>): void => {
+    setSearch(data)
 
-    const [latStr, lonStr] = (
-      searchData?.valueOf() as unknown as LocationValueOf
-    ).value.split(' ')
+    const searchData = data as unknown as LocationValueOf
+
+    const [latStr, lonStr] = searchData.value.split(' ')
 
     if (setCurrLocation) {
       setCurrLocation({
+        label: searchData.label,
         latitude: Number(latStr || 0),
         longitude: Number(lonStr || 0),
       })

@@ -1,6 +1,7 @@
 import { createContext, useState, ReactNode, useMemo, Dispatch } from 'react'
 
 export interface Location {
+  label: string
   latitude: number
   longitude: number
 }
@@ -18,6 +19,7 @@ export interface LocationProviderProps {
 
 export const LocationProvider = ({ children }: LocationProviderProps) => {
   const [currLocation, setCurrLocation] = useState({
+    label: '',
     latitude: 0,
     longitude: 0,
   })

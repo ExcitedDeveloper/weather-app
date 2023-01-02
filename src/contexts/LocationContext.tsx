@@ -1,14 +1,14 @@
 import { createContext, useState, ReactNode, useMemo, Dispatch } from 'react'
 
 export interface Location {
-  label: string
-  latitude: number
-  longitude: number
+  label?: string
+  latitude?: number
+  longitude?: number
 }
 
 export interface LocationContextProps {
-  currLocation: Location
-  setCurrLocation: Dispatch<React.SetStateAction<Location>>
+  currLocation?: Location
+  setCurrLocation: Dispatch<React.SetStateAction<Location | undefined>>
 }
 
 export const LocationContext = createContext<Partial<LocationContextProps>>({})
@@ -18,11 +18,7 @@ export interface LocationProviderProps {
 }
 
 export const LocationProvider = ({ children }: LocationProviderProps) => {
-  const [currLocation, setCurrLocation] = useState({
-    label: '',
-    latitude: 0,
-    longitude: 0,
-  })
+  const [currLocation, setCurrLocation] = useState<Location>()
 
   const value = useMemo(
     () => ({ currLocation, setCurrLocation }),

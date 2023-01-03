@@ -125,7 +125,7 @@ const Search = () => {
       value={search}
       onChange={handleOnChange}
       loadOptions={loadOptions}
-      className="w-full"
+      className="w-96"
     />
   )
 }

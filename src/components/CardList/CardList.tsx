@@ -21,21 +21,24 @@ const CardList: React.FC<Props> = ({ items }) => {
   }
 
   return (
-    <div className="flex flex-col min-w-full mx-auto p-20">
+    <div className="mx-auto flex min-w-full flex-col p-20">
       {items.map((item) => (
         <div
           key={item.id}
-          className="flex flex-col w-100 rounded-md shadow-md mb-4"
+          className="w-100 mb-4 flex flex-col rounded-md shadow-md"
         >
           <div
-            className="p-4 cursor-pointer"
+            role="button"
+            tabIndex={0}
+            className="cursor-pointer p-4"
             onClick={() => handleCardClick(item.id)}
+            onKeyDown={() => handleCardClick(item.id)}
           >
             <h3 className="text-lg font-bold text-gray-800">{item.title}</h3>
             <p className="text-gray-600">{item.description}</p>
           </div>
           {expandedId === item.id && (
-            <div className="p-4 bg-gray-100">
+            <div className="bg-gray-100 p-4">
               <p className="text-gray-800">{item.content}</p>
             </div>
           )}

@@ -2,7 +2,7 @@ import './App.css'
 import Search from './components/Search/Search'
 import CardList from './components/CardList/CardList'
 
-import DailyCard from './components/DailyCard/DailyCard'
+import CurrentCard from './components/CurrentCard/CurrentCard'
 
 const testData = [
   {
@@ -33,7 +33,7 @@ function App() {
     <div className="flex flex-col">
       <div className="mx-auto mt-5 flex w-1/4 flex-col items-center py-5">
         <Search />
-        <DailyCard />
+        <CurrentCard />
       </div>
       <CardList items={testData} />
     </div>

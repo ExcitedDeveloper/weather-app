@@ -39,11 +39,11 @@ const CardList: React.FC<Props> = () => {
               onClick={() => handleCardClick(currDay.id)}
               onKeyDown={() => handleCardClick(currDay.id)}
             >
-              <div className="w-36">{currDay.dayOfWeek}</div>
-              <div className="w-36">
+              <div>{currDay.dayOfWeek}</div>
+              <div>
                 {currDay.lowTemp}/{currDay.highTemp}
               </div>
-              <div className="w-36">
+              <div>
                 <img
                   src={`${OPEN_WEATHER_ICON_URL}${currDay.icon}.png`}
                   className="w-30 -mt-4 h-20"
@@ -51,7 +51,7 @@ const CardList: React.FC<Props> = () => {
                 />
               </div>
               <div className="flex-1">{currDay.description}</div>
-              <div className="w-36">{`${currDay.windDirection} ${currDay.windSpeed} mph`}</div>
+              <div>{`${currDay.windDirection} ${currDay.windSpeed} mph`}</div>
             </div>
             {expandedId === currDay.id && (
               <div className="grid grid-cols-3 grid-rows-2 gap-4 bg-gray-100 p-4 lg:grid-cols-2 sm:grid-cols-1">

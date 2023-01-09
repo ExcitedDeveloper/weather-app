@@ -39,7 +39,7 @@ const CurrentCard = () => {
         <div className="grid flex-1 grid-cols-[2fr_1fr] grid-rows-3 text-xs">
           <div className="col-span-2">Details</div>
           <div>Wind</div>
-          <div>{`${weatherDetails.currentWeather?.wind}`}</div>
+          <div>{`${weatherDetails.currentWeather?.wind} mph`}</div>
           <div>Wind Direction</div>
           <div>{`${weatherDetails.currentWeather?.winddirection}`}</div>
         </div>

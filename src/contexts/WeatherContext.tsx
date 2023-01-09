@@ -49,7 +49,7 @@ export const WeatherProvider = ({ children }: WeatherProviderProps) => {
           json.daily.sunset[0]
         ),
         temp: `${Math.round(json.current_weather.temperature)}\u00B0F`,
-        wind: `${Math.round(json.current_weather.windspeed)}mph`,
+        wind: `${Math.round(json.current_weather.windspeed)}`,
         winddirection: `${degToCompass(
           Math.round(json.current_weather.winddirection)
         )}`,
@@ -60,7 +60,7 @@ export const WeatherProvider = ({ children }: WeatherProviderProps) => {
       return DAYS_OF_WEEK[new Date(time).getDay()]
     }
 
-    const getDailyWeather = (json: OpenMeteo): Partial<DailyWeather>[] => {
+    const getDailyWeather = (json: OpenMeteo): DailyWeather[] => {
       // daily has the current weather in the first elements of all
       // it's sub arrays.  Therefor the daily weather data starts at
       // index one.
@@ -69,6 +69,7 @@ export const WeatherProvider = ({ children }: WeatherProviderProps) => {
       // Add one to the indexes of the other arrays to get the
       // corresponding data in the other arrays.
       return json.daily.time.slice(2).map((time, index) => ({
+        id: crypto.randomUUID(),
         icon: getCurrentWeatherIcon(
           json.daily.weathercode[index + 1],
           time,
@@ -98,8 +99,8 @@ export const WeatherProvider = ({ children }: WeatherProviderProps) => {
         windDirection: `${degToCompass(
           json.daily.winddirection_10m_dominant[index + 1]
         )}`,
-        windGusts: `${Math.round(json.daily.windgusts_10m_max[index + 1])}mph`,
-        windSpeed: `${Math.round(json.daily.windspeed_10m_max[index + 1])}mph`,
+        windGusts: `${Math.round(json.daily.windgusts_10m_max[index + 1])}`,
+        windSpeed: `${Math.round(json.daily.windspeed_10m_max[index + 1])}`,
       }))
     }
 
@@ -175,6 +176,7 @@ interface CurrentWeather {
 }
 
 interface DailyWeather {
+  id: string
   icon: string
   dayOfWeek: string
   description: string
@@ -193,7 +195,7 @@ interface DailyWeather {
 
 export interface WeatherDetails {
   currentWeather?: CurrentWeather
-  dailyWeather: Partial<DailyWeather>[]
+  dailyWeather: DailyWeather[]
 }
 
 export interface WeatherContextProps {

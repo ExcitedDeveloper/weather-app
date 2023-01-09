@@ -1,8 +1,6 @@
 import { useState, useContext } from 'react'
 import { WeatherContext } from '../../contexts/WeatherContext'
 import { OPEN_WEATHER_ICON_URL } from '../../apis/weatherApis'
-// import 'tailwindcss/dist/base.css'
-// import 'tailwindcss/dist/components.css'
 
 interface Card {
   id: number
@@ -54,8 +52,15 @@ const CardList: React.FC<Props> = () => {
               <div className="w-36">{`${currDay.windDirection} ${currDay.windSpeed} mph`}</div>
             </div>
             {expandedId === currDay.id && (
-              <div className="bg-gray-100 p-4">
-                <p className="text-gray-800">{currDay.description}</p>
+              <div className="grid grid-cols-[150px_150px_150px_150px] grid-rows-2 bg-gray-100 p-4">
+                <div>Feels Like Min</div>
+                <div>{currDay.feelsLikeMin}</div>
+                <div>Sunrise</div>
+                <div>{currDay.sunrise}</div>
+                <div>Feels Like Max</div>
+                <div>{currDay.feelsLikeMax}</div>
+                <div>Sunset</div>
+                <div>{currDay.sunset}</div>
               </div>
             )}
           </div>

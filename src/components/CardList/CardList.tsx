@@ -21,6 +21,8 @@ const CardList: React.FC<Props> = () => {
     setExpandedId((prevId) => (prevId === id ? null : id))
   }
 
+  if (!weatherDetails) return null
+
   return (
     <>
       <div className="px-20 text-lg font-bold">Daily</div>
@@ -52,15 +54,21 @@ const CardList: React.FC<Props> = () => {
               <div className="w-36">{`${currDay.windDirection} ${currDay.windSpeed} mph`}</div>
             </div>
             {expandedId === currDay.id && (
-              <div className="grid grid-cols-[150px_150px_150px_150px] grid-rows-2 bg-gray-100 p-4">
+              <div className="grid grid-cols-[150px_150px_150px_150px_150px_150px_150px_150px] grid-rows-2 bg-gray-100 p-4">
                 <div>Feels Like Min</div>
                 <div>{currDay.feelsLikeMin}</div>
                 <div>Sunrise</div>
                 <div>{currDay.sunrise}</div>
+                <div>Wind Speed Max</div>
+                <div>{currDay.windSpeed} mph</div>
+                <div>Wind Direction</div>
+                <div>{currDay.windDirection}</div>
                 <div>Feels Like Max</div>
                 <div>{currDay.feelsLikeMax}</div>
                 <div>Sunset</div>
                 <div>{currDay.sunset}</div>
+                <div>Wind Speed Gusts</div>
+                <div>{currDay.windGusts} mph</div>
               </div>
             )}
           </div>

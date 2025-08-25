@@ -32,6 +32,19 @@ const Search = () => {
     }
   }
 
+  const handleInputChange = (inputValue: string) => {
+    if (selectedValue && inputValue === '') {
+      setSelectedValue(null)
+    }
+    return inputValue
+  }
+
+  const handleMenuOpen = () => {
+    if (selectedValue) {
+      setSelectedValue(null)
+    }
+  }
+
   return (
     <div className="w-96">
       <AsyncPaginate
@@ -39,8 +52,11 @@ const Search = () => {
         debounceTimeout={600}
         value={selectedValue}
         onChange={handleOnChange}
+        onInputChange={handleInputChange}
+        onMenuOpen={handleMenuOpen}
         loadOptions={loadOptions}
         isLoading={isLoading}
+        isClearable={true}
         className="w-full"
         noOptionsMessage={({ inputValue }) => 
           inputValue ? `No cities found for "${inputValue}"` : 'Type to search cities'

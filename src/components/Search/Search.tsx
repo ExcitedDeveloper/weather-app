@@ -1,132 +1,63 @@
-import { useState, useContext } from 'react'
+import { useState } from 'react'
 import { SingleValue } from 'react-select'
 import { AsyncPaginate } from 'react-select-async-paginate'
-import { GEO_API_URL, geoApiOptions } from '../../apis/geoApi'
-import { LocationContext } from '../../contexts/LocationContext'
-
-export const DFLT_COUNTRY_CODE = 'US'
-
-export interface City {
-  name: string
-  latitude: string
-  longitude: string
-  regionCode: string
-  countryCode: string
-  country?: string
-}
-
-export interface LocationValueOf {
-  label: string
-  value: string
-}
-
-const getCountryName = (countryCode: string) => {
-  const regionNames = new Intl.DisplayNames(['en'], { type: 'region' })
-  return regionNames.of(countryCode)
-}
+import { useGeoSearch, SearchOption } from '../../hooks/useGeoSearch'
+import { useLocation } from '../../hooks/useLocation'
 
 const Search = () => {
-  const [search, setSearch] = useState<string | null>(null)
-  const { setCurrLocation } = useContext(LocationContext)
+  const [selectedValue, setSelectedValue] =
+    useState<SingleValue<SearchOption>>(null)
+  const { searchCities, parseLocationValue, isLoading, error } = useGeoSearch()
+  const { setCurrLocation } = useLocation()
 
   const loadOptions = async (inputValue: string) => {
-    const emptyOptions = { options: [] }
-
-    if (!inputValue) {
-      return emptyOptions
+    try {
+      const options = await searchCities(inputValue)
+      return { options }
+    } catch (err) {
+      return { options: [] }
     }
-
-    const [namePrefix, regionCode, tmpCountryCode] = inputValue
-      .split(',')
-      .map((part) => part.toLowerCase())
-      .map((part) => part.trim())
-
-    // If regionCode has been specified, default countryCode
-    // to US if countryCode is not entered
-    const countryCode = regionCode
-      ? tmpCountryCode || DFLT_COUNTRY_CODE
-      : undefined
-
-    let url
-    let results
-
-    if (namePrefix && regionCode && countryCode) {
-      url = `${GEO_API_URL}/countries/${countryCode}/regions/${regionCode}/cities?namePrefix=${namePrefix}`
-
-      const response = await fetch(url, geoApiOptions)
-
-      const json = await response.json()
-
-      results = {
-        options: json.data.map((city: City) => {
-          return {
-            value: `${city.latitude} ${city.longitude}`,
-            label: `${city.name}, ${regionCode.toUpperCase()}, ${getCountryName(
-              countryCode
-            )}`,
-          }
-        }),
-      }
-    } else {
-      url = `${GEO_API_URL}/cities?limit=10&namePrefix=${namePrefix}`
-
-      const response = await fetch(url, geoApiOptions)
-
-      const json = await response.json()
-
-      results = {
-        options: json.data
-          .filter((city: City) => {
-            return regionCode
-              ? city.regionCode.toLowerCase() === regionCode
-              : true
-          })
-          .filter((city: City) => {
-            return countryCode
-              ? city.countryCode.toLowerCase() === countryCode
-              : true
-          })
-          .map((city: City) => {
-            return {
-              value: `${city.latitude} ${city.longitude}`,
-              label: `${
-                city.name
-              }, ${city.regionCode.toUpperCase()}, ${getCountryName(
-                city.countryCode
-              )}`,
-            }
-          }),
-      }
-    }
-
-    return results || emptyOptions
   }
 
-  const handleOnChange = (data: SingleValue<string>): void => {
-    setSearch(data)
+  const handleOnChange = (data: SingleValue<SearchOption>) => {
+    setSelectedValue(data)
 
-    const searchData = data as unknown as LocationValueOf
-
-    const [latStr, lonStr] = searchData.value.split(' ')
-
-    if (setCurrLocation) {
+    if (data) {
+      const { latitude, longitude } = parseLocationValue(data.value)
       setCurrLocation({
-        label: searchData.label,
-        latitude: Number(latStr || 0),
-        longitude: Number(lonStr || 0),
+        label: data.label,
+        latitude,
+        longitude,
       })
     }
   }
 
   return (
-    <AsyncPaginate
-      placeholder="Search for city"
-      debounceTimeout={600}
-      value={search}
-      onChange={handleOnChange}
-      loadOptions={loadOptions}
-      className="w-96"
-    />
+    <div className="w-96">
+      <AsyncPaginate
+        placeholder="Search for city (e.g., 'New York' or 'London')"
+        debounceTimeout={600}
+        value={selectedValue}
+        onChange={handleOnChange}
+        loadOptions={loadOptions}
+        isLoading={isLoading}
+        className="w-full"
+        noOptionsMessage={({ inputValue }) => 
+          inputValue ? `No cities found for "${inputValue}"` : 'Type to search cities'
+        }
+        loadingMessage={() => 'Searching cities...'}
+      />
+      {error && (
+        <div className="mt-2 text-sm text-red-600" role="alert">
+          ❌ {error}
+        </div>
+      )}
+      {isLoading && (
+        <div className="mt-2 text-sm text-blue-600">
+          🔍 Searching...
+        </div>
+      )}
+    </div>
   )
 }
 

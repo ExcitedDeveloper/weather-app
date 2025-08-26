@@ -12,7 +12,7 @@
     "test": "vitest",
     "test:ui": "vitest --ui",
     "test:coverage": "vitest --coverage",
-    "vercel-build": ""
+    "vercel-build": "npm run build"
   },
   "dependencies": {
     "@iconscout/react-unicons": "^1.1.6",

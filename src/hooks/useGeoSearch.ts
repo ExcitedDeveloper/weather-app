@@ -7,7 +7,7 @@ export interface City {
   latitude?: string
   longitude?: string
   regionCode?: string
-  region?: string  // Some APIs use 'region' instead of 'regionCode'
+  region?: string // Some APIs use 'region' instead of 'regionCode'
   countryCode?: string
   country?: string
 }
@@ -42,10 +42,12 @@ export const useGeoSearch = () => {
     const name = city.name || 'Unknown City'
     const latitude = city.latitude || '0'
     const longitude = city.longitude || '0'
-    
+
     return {
       value: `${latitude} ${longitude}`,
-      label: `${name}${regionCode ? `, ${regionCode.toUpperCase()}` : ''}, ${getCountryName(countryCode)}`,
+      label: `${name}${
+        regionCode ? `, ${regionCode.toUpperCase()}` : ''
+      }, ${getCountryName(countryCode)}`,
     }
   }
 
@@ -59,11 +61,11 @@ export const useGeoSearch = () => {
       buildUrlWithParams(url, { namePrefix }),
       geoApiOptions
     )
-    
+
     if (!data.data || !Array.isArray(data.data)) {
       return []
     }
-    
+
     return data.data.map(formatCityOption)
   }
 
@@ -100,14 +102,14 @@ export const useGeoSearch = () => {
 
   const parseSearchInput = (input: string) => {
     const parts = input.split(',').map((part) => part.trim())
-    
+
     // Only consider it a region code if there are at least 2 parts and the region is at least 2 characters
     const namePrefix = parts[0]?.toLowerCase() || ''
     const regionCode =
       parts.length >= 2 && parts[1] && parts[1].length >= 2
         ? parts[1].toLowerCase()
         : ''
-    
+
     let countryCode = ''
     if (parts.length >= 3 && parts[2]) {
       countryCode = parts[2].toLowerCase()
@@ -125,7 +127,8 @@ export const useGeoSearch = () => {
 
     // Check if API key is available
     if (!import.meta.env.VITE_RAPIDAPI_KEY) {
-      const errorMessage = 'Missing VITE_RAPIDAPI_KEY environment variable. Please check your .env file.'
+      const errorMessage =
+        'Missing VITE_RAPIDAPI_KEY environment variable. Please check your .env file.'
       setError(errorMessage)
       return []
     }

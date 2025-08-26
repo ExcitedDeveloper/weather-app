@@ -156,7 +156,8 @@ export const useWeather = (location: Location | undefined) => {
 
       setWeatherDetails(newWeatherDetails)
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to fetch weather data'
+      const errorMessage =
+        err instanceof Error ? err.message : 'Failed to fetch weather data'
       setError(errorMessage)
       console.error('Weather fetch error:', err)
     } finally {

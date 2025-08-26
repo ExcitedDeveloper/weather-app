@@ -16,13 +16,16 @@ export const WeatherProvider = ({ children }: WeatherProviderProps) => {
   const { currLocation } = useLocation()
   const { weatherDetails, loading, error, refetch } = useWeather(currLocation)
 
-  const value = useMemo<WeatherContextValue>(() => ({
-    currentWeather: weatherDetails?.currentWeather,
-    dailyWeather: weatherDetails?.dailyWeather || [],
-    loading,
-    error,
-    refetch,
-  }), [weatherDetails, loading, error, refetch])
+  const value = useMemo<WeatherContextValue>(
+    () => ({
+      currentWeather: weatherDetails?.currentWeather,
+      dailyWeather: weatherDetails?.dailyWeather || [],
+      loading,
+      error,
+      refetch,
+    }),
+    [weatherDetails, loading, error, refetch]
+  )
 
   return (
     <WeatherContext.Provider value={value}>{children}</WeatherContext.Provider>

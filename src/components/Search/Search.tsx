@@ -3,12 +3,14 @@ import { SingleValue } from 'react-select'
 import { AsyncPaginate } from 'react-select-async-paginate'
 import { useGeoSearch, SearchOption } from '../../hooks/useGeoSearch'
 import { useLocation } from '../../hooks/useLocation'
+import { useTheme } from '../../hooks/useTheme'
 
 const Search = () => {
   const [selectedValue, setSelectedValue] =
     useState<SingleValue<SearchOption>>(null)
   const { searchCities, parseLocationValue, isLoading, error } = useGeoSearch()
   const { setCurrLocation } = useLocation()
+  const { theme } = useTheme()
 
   const loadOptions = async (inputValue: string) => {
     try {
@@ -48,42 +50,62 @@ const Search = () => {
   const customStyles = {
     control: (provided: any, state: any) => ({
       ...provided,
-      backgroundColor: 'rgba(255, 255, 255, 0.1)',
+      backgroundColor:
+        theme === 'dark'
+          ? 'rgba(255, 255, 255, 0.1)'
+          : 'rgba(255, 255, 255, 0.8)',
       backdropFilter: 'blur(10px)',
-      border: '1px solid rgba(255, 255, 255, 0.2)',
+      border:
+        theme === 'dark'
+          ? '1px solid rgba(255, 255, 255, 0.2)'
+          : '1px solid rgba(107, 114, 128, 0.3)',
       borderRadius: '16px',
       padding: '8px 12px',
       minHeight: '56px',
       boxShadow: state.isFocused
-        ? '0 0 0 2px rgba(255, 255, 255, 0.3)'
+        ? theme === 'dark'
+          ? '0 0 0 2px rgba(255, 255, 255, 0.3)'
+          : '0 0 0 2px rgba(59, 130, 246, 0.3)'
         : '0 10px 25px rgba(0, 0, 0, 0.1)',
-      transition: 'all 0.2s ease',
+      transition: 'all 0.5s ease',
       '&:hover': {
-        backgroundColor: 'rgba(255, 255, 255, 0.15)',
+        backgroundColor:
+          theme === 'dark'
+            ? 'rgba(255, 255, 255, 0.15)'
+            : 'rgba(255, 255, 255, 0.9)',
         transform: 'translateY(-1px)',
       },
     }),
     input: (provided: any) => ({
       ...provided,
-      color: 'white',
+      color: theme === 'dark' ? 'white' : '#1f2937',
       fontSize: '16px',
     }),
     placeholder: (provided: any) => ({
       ...provided,
-      color: 'rgba(255, 255, 255, 0.7)',
+      color:
+        theme === 'dark'
+          ? 'rgba(255, 255, 255, 0.7)'
+          : 'rgba(107, 114, 128, 0.7)',
       fontSize: '16px',
     }),
     singleValue: (provided: any) => ({
       ...provided,
-      color: 'white',
+      color: theme === 'dark' ? 'white' : '#1f2937',
       fontSize: '16px',
     }),
     menu: (provided: any) => ({
       ...provided,
-      backgroundColor: 'rgba(255, 255, 255, 0.95)',
+      backgroundColor:
+        theme === 'dark'
+          ? 'rgba(255, 255, 255, 0.95)'
+          : 'rgba(255, 255, 255, 0.98)',
       backdropFilter: 'blur(10px)',
       borderRadius: '12px',
-      border: '1px solid rgba(255, 255, 255, 0.2)',
+      border:
+        theme === 'dark'
+          ? '1px solid rgba(255, 255, 255, 0.2)'
+          : '1px solid rgba(107, 114, 128, 0.2)',
       boxShadow: '0 20px 40px rgba(0, 0, 0, 0.15)',
       marginTop: '8px',
     }),
@@ -102,7 +124,10 @@ const Search = () => {
     indicatorsContainer: (provided: any) => ({
       ...provided,
       '& > div': {
-        color: 'rgba(255, 255, 255, 0.7)',
+        color:
+          theme === 'dark'
+            ? 'rgba(255, 255, 255, 0.7)'
+            : 'rgba(107, 114, 128, 0.7)',
       },
     }),
   }
@@ -130,19 +155,39 @@ const Search = () => {
       />
       {error && (
         <div
-          className="mt-3 rounded-lg border border-red-300/30 bg-red-500/20 p-3 backdrop-blur-lg"
+          className={`mt-3 rounded-lg border border-red-300/30 p-3 backdrop-blur-lg transition-all duration-500 ${
+            theme === 'dark' ? 'bg-red-500/20' : 'bg-red-100/80'
+          }`}
           role="alert"
         >
-          <div className="flex items-center text-white">
+          <div
+            className={`flex items-center transition-colors duration-500 ${
+              theme === 'dark' ? 'text-white' : 'text-gray-900'
+            }`}
+          >
             <span className="mr-2 text-lg">⚠️</span>
             <span className="text-sm font-medium">{error}</span>
           </div>
         </div>
       )}
       {isLoading && (
-        <div className="mt-3 rounded-lg border border-blue-300/30 bg-blue-500/20 p-3 backdrop-blur-lg">
-          <div className="flex items-center text-white">
-            <div className="mr-3 h-4 w-4 animate-spin rounded-full border-2 border-white/20 border-t-white" />
+        <div
+          className={`mt-3 rounded-lg border border-blue-300/30 p-3 backdrop-blur-lg transition-all duration-500 ${
+            theme === 'dark' ? 'bg-blue-500/20' : 'bg-blue-100/80'
+          }`}
+        >
+          <div
+            className={`flex items-center transition-colors duration-500 ${
+              theme === 'dark' ? 'text-white' : 'text-gray-900'
+            }`}
+          >
+            <div
+              className={`mr-3 h-4 w-4 animate-spin rounded-full border-2 ${
+                theme === 'dark'
+                  ? 'border-white/20 border-t-white'
+                  : 'border-gray-300/30 border-t-gray-700'
+              }`}
+            />
             <span className="text-sm font-medium">Searching cities...</span>
           </div>
         </div>

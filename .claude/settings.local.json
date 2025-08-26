@@ -13,7 +13,8 @@
       "WebFetch(domain:geodb-cities-api.wirefreethought.com)",
       "WebFetch(domain:rapidapi.com)",
       "Bash(tsc --noEmit)",
-      "Bash(npx eslint:*)"
+      "Bash(npx eslint:*)",
+      "Bash(npm run build:*)"
     ],
     "deny": [],
     "ask": []

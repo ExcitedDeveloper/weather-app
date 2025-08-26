@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState, ReactNode, useMemo } from 'react'
+import React, { createContext, useEffect, useState, ReactNode, useMemo } from 'react'
 
 export type Theme = 'light' | 'dark'
 
@@ -49,5 +49,9 @@ export const ThemeProvider = ({ children }: ThemeProviderProps) => {
     [theme]
   )
 
-  return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>
+  return (
+    <ThemeContext.Provider value={value}>
+      {children}
+    </ThemeContext.Provider>
+  )
 }

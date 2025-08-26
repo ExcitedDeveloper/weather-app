@@ -5,18 +5,20 @@ import { useGeoSearch } from '../useGeoSearch'
 // Mock the API utils
 vi.mock('../../util/api-utils', () => ({
   fetchWithErrorHandling: vi.fn(),
-  buildUrlWithParams: vi.fn((base, params) => {
-    const url = new URL(base)
-    Object.entries(params).forEach(([key, value]) => {
-      url.searchParams.append(key, value.toString())
-    })
-    return url.toString()
-  }),
+  buildUrlWithParams: vi.fn(
+    (base: string, params: Record<string, string | number>) => {
+      const url = new URL(base)
+      Object.entries(params).forEach(([key, value]) => {
+        url.searchParams.append(key, value.toString())
+      })
+      return url.toString()
+    }
+  ),
 }))
 
 const mockFetchWithErrorHandling = vi.mocked(
-  await import('../../util/api-utils')
-).fetchWithErrorHandling
+  (await import('../../util/api-utils')).fetchWithErrorHandling
+)
 
 describe('useGeoSearch', () => {
   beforeEach(() => {

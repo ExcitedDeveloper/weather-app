@@ -3,7 +3,7 @@ import { fetchWithErrorHandling, buildUrlWithParams } from '../api-utils'
 
 // Mock fetch globally
 const mockFetch = vi.fn()
-global.fetch = mockFetch
+vi.stubGlobal('fetch', mockFetch)
 
 describe('api-utils', () => {
   beforeEach(() => {

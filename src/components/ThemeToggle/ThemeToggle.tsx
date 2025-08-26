@@ -9,8 +9,8 @@ const ThemeToggle = () => {
       onClick={toggleTheme}
       className={`group relative flex h-12 w-12 items-center justify-center rounded-full backdrop-blur-lg transition-all duration-300 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-transparent ${
         theme === 'dark'
-          ? 'border border-white/20 bg-white/10 hover:bg-white/15 focus:ring-white/50'
-          : 'border-2 border-gray-400/60 bg-white/60 hover:bg-white/80 hover:border-gray-500/70 focus:ring-blue-500/50'
+          ? 'hover:bg-white/15 border border-white/20 bg-white/10 focus:ring-white/50'
+          : 'border-2 border-gray-400/60 bg-white/60 hover:border-gray-500/70 hover:bg-white/80 focus:ring-blue-500/50'
       }`}
       aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
       title={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}

@@ -11,6 +11,18 @@ export interface LocationContextProps {
   setCurrLocation: Dispatch<React.SetStateAction<Location | undefined>>
 }
 
+export interface LocationUtilsProps {
+  currLocation?: Location
+  setCurrLocation: Dispatch<React.SetStateAction<Location | undefined>>
+  setLocationFromCoords: (
+    latitude: number,
+    longitude: number,
+    label?: string
+  ) => void
+  clearLocation: () => void
+  hasValidLocation: (location: Location | undefined) => boolean
+}
+
 export const LocationContext = createContext<Partial<LocationContextProps>>({})
 
 export interface LocationProviderProps {

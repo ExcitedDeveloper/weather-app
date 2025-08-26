@@ -2,6 +2,7 @@ import { useContext } from 'react'
 import {
   LocationContext,
   LocationContextProps,
+  LocationUtilsProps,
   Location,
 } from '../contexts/LocationContext'
 
@@ -21,7 +22,7 @@ export const useLocation = (): LocationContextProps => {
 /**
  * Hook that provides location utilities
  */
-export const useLocationUtils = () => {
+export const useLocationUtils = (): LocationUtilsProps => {
   const { currLocation, setCurrLocation } = useLocation()
 
   const setLocationFromCoords = (

@@ -1,3 +1,4 @@
+import React from 'react'
 import { describe, it, expect, vi } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import App from '../App'
@@ -17,6 +18,10 @@ vi.mock('../components/CardList/CardList', () => ({
   default: () => (
     <div data-testid="card-list-component">Card List Component</div>
   ),
+}))
+
+vi.mock('../hooks/useTheme', () => ({
+  useTheme: vi.fn(() => ({ theme: 'dark', toggleTheme: vi.fn() })),
 }))
 
 describe('App', () => {
@@ -52,10 +57,9 @@ describe('App', () => {
 
     const appContainer = container.firstChild as HTMLElement
     expect(appContainer).toHaveClass(
-      'flex',
-      'flex-col',
       'min-h-screen',
-      'bg-gray-50'
+      'transition-all',
+      'duration-500'
     )
   })
 })

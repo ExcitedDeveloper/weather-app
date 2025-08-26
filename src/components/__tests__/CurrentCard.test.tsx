@@ -1,14 +1,20 @@
-import { describe, it, expect, vi } from 'vitest'
+import React from 'react'
+import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import CurrentCard from '../CurrentCard/CurrentCard'
 
 // Mock the hooks
 vi.mock('../../hooks/useLocation', () => ({
   useLocation: vi.fn(),
+  useLocationUtils: vi.fn(),
 }))
 
 vi.mock('../../hooks/useWeatherContext', () => ({
   useWeatherContext: vi.fn(),
+}))
+
+vi.mock('../../hooks/useTheme', () => ({
+  useTheme: vi.fn(() => ({ theme: 'dark' })),
 }))
 
 describe('CurrentCard', () => {
@@ -37,9 +43,6 @@ describe('CurrentCard', () => {
     vi.mocked(useLocation).mockReturnValue({
       currLocation: mockLocation,
       setCurrLocation: vi.fn(),
-      setLocationFromCoords: vi.fn(),
-      clearLocation: vi.fn(),
-      hasValidLocation: vi.fn(),
     })
 
     vi.mocked(useWeatherContext).mockReturnValue({
@@ -53,7 +56,7 @@ describe('CurrentCard', () => {
     render(<CurrentCard />)
 
     expect(screen.getByText('Loading weather...')).toBeInTheDocument()
-    expect(screen.getByRole('status')).toBeInTheDocument() // Loading spinner
+    expect(screen.getByText('Please wait')).toBeInTheDocument()
   })
 
   it('should show error state', async () => {
@@ -63,9 +66,6 @@ describe('CurrentCard', () => {
     vi.mocked(useLocation).mockReturnValue({
       currLocation: mockLocation,
       setCurrLocation: vi.fn(),
-      setLocationFromCoords: vi.fn(),
-      clearLocation: vi.fn(),
-      hasValidLocation: vi.fn(),
     })
 
     vi.mocked(useWeatherContext).mockReturnValue({
@@ -89,9 +89,6 @@ describe('CurrentCard', () => {
     vi.mocked(useLocation).mockReturnValue({
       currLocation: mockLocation,
       setCurrLocation: vi.fn(),
-      setLocationFromCoords: vi.fn(),
-      clearLocation: vi.fn(),
-      hasValidLocation: vi.fn(),
     })
 
     vi.mocked(useWeatherContext).mockReturnValue({
@@ -105,7 +102,7 @@ describe('CurrentCard', () => {
     render(<CurrentCard />)
 
     expect(screen.getByText('New York, NY')).toBeInTheDocument()
-    expect(screen.getByText('clear sky')).toBeInTheDocument()
+    expect(screen.getByText('Clear Sky')).toBeInTheDocument()
     expect(screen.getByText('72°F')).toBeInTheDocument()
     expect(screen.getByText('10 mph')).toBeInTheDocument()
     expect(screen.getByText('N')).toBeInTheDocument()
@@ -119,9 +116,6 @@ describe('CurrentCard', () => {
     vi.mocked(useLocation).mockReturnValue({
       currLocation: undefined,
       setCurrLocation: vi.fn(),
-      setLocationFromCoords: vi.fn(),
-      clearLocation: vi.fn(),
-      hasValidLocation: vi.fn(),
     })
 
     vi.mocked(useWeatherContext).mockReturnValue({
@@ -143,9 +137,6 @@ describe('CurrentCard', () => {
     vi.mocked(useLocation).mockReturnValue({
       currLocation: mockLocation,
       setCurrLocation: vi.fn(),
-      setLocationFromCoords: vi.fn(),
-      clearLocation: vi.fn(),
-      hasValidLocation: vi.fn(),
     })
 
     vi.mocked(useWeatherContext).mockReturnValue({

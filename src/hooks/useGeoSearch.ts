@@ -62,7 +62,7 @@ export const useGeoSearch = () => {
       geoApiOptions
     )
 
-    if (!data.data || !Array.isArray(data.data)) {
+    if (!data.data || !Array.isArray(data.data) || data.data.length === 0) {
       return []
     }
 
@@ -84,11 +84,11 @@ export const useGeoSearch = () => {
       geoApiOptions
     )
 
-    if (!data.data || !Array.isArray(data.data)) {
+    if (!data.data || !Array.isArray(data.data) || data.data.length === 0) {
       return []
     }
 
-    return data.data
+    const filteredCities = data.data
       .filter((city) => {
         const cityRegion = (city.regionCode || city.region || '').toLowerCase()
         return !regionCode || cityRegion === regionCode
@@ -97,7 +97,8 @@ export const useGeoSearch = () => {
         const cityCountry = (city.countryCode || '').toLowerCase()
         return !countryCode || cityCountry === countryCode
       })
-      .map(formatCityOption)
+
+    return filteredCities.map(formatCityOption)
   }
 
   const parseSearchInput = (input: string) => {
@@ -148,7 +149,26 @@ export const useGeoSearch = () => {
       setError(null)
       return results
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Search failed'
+      let errorMessage = 'Search failed'
+
+      if (err instanceof Error) {
+        if (err.message.includes('404')) {
+          errorMessage = `No cities found matching "${inputValue.trim()}". Try a different spelling or a more general search term.`
+        } else if (err.message.includes('401')) {
+          errorMessage =
+            'Authentication failed. Please check your API key configuration.'
+        } else if (err.message.includes('429')) {
+          errorMessage =
+            'Too many requests. Please wait a moment and try again.'
+        } else if (err.message.includes('500')) {
+          errorMessage = 'Server error. Please try again later.'
+        } else if (err.message.includes('Failed to fetch')) {
+          errorMessage = 'Network error. Please check your internet connection.'
+        } else {
+          errorMessage = err.message
+        }
+      }
+
       setError(errorMessage)
       return []
     } finally {

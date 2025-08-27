@@ -148,7 +148,7 @@ const Search = () => {
         className="w-full"
         noOptionsMessage={({ inputValue }) =>
           inputValue
-            ? `No cities found for "${inputValue}"`
+            ? `No cities found matching "${inputValue}". Try checking the spelling or use a more general search term.`
             : 'Type to search cities'
         }
         loadingMessage={() => 'Searching cities...'}

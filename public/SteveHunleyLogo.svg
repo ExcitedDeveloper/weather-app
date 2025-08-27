@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+  <!-- Background with same teal color -->
+  <rect width="100" height="100" fill="#64FFDA" />
+  
+  <!-- Code brackets - made larger and bolder -->
+  <path d="M30 25 L12 35 L12 65 L30 75" 
+        stroke="#0A192F" 
+        stroke-width="6" 
+        fill="none" 
+        stroke-linecap="round" 
+        stroke-linejoin="round" />
+  
+  <path d="M70 25 L88 35 L88 65 L70 75" 
+        stroke="#0A192F" 
+        stroke-width="6" 
+        fill="none" 
+        stroke-linecap="round" 
+        stroke-linejoin="round" />
+  
+  <!-- Developer initial "H" in the center - made much larger -->
+  <text x="50" y="68" 
+        font-family="Arial, sans-serif" 
+        font-size="48" 
+        font-weight="bold" 
+        text-anchor="middle" 
+        fill="#0A192F">H</text>
+</svg>
